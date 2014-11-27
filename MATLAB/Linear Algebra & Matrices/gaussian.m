@@ -35,10 +35,6 @@ function [X] = gaussian(A, b)
   
   % Calculate xn-1 ... x1
   for ii = N-1:-1:1
-    summation = 0;
-    for jj = ii+1:N
-      summation = summation + (A(ii, jj) * X(jj));
-    end
-    X(ii) = (b(ii) - summation) / A(ii, ii);
+    X(ii) = (b(ii) - sum(A(ii, ii+1:N) * X(ii+1:N))) / A(ii, ii);
   end
 end
