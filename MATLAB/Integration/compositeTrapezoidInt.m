@@ -2,7 +2,7 @@ function [I] = compositeTrapezoidInt(f, x1, xn, n)
 %compositeTrapezoidInt Integrate functions using the composite trapezoid rule
 %   I=compositeTrapezoidInt(f,x1,xn,n) estimates the integral of the
 %   function f between x1 through xn using n datapoints with the composite
-%   trapezoid rule.
+%   trapezoid rule. Note that f must be vectorized. 
   if n <= 1
     error('Insufficent data points. Try increasing n.');
   end
