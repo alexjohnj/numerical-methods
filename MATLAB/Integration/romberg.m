@@ -9,6 +9,11 @@ function [I] = romberg(f, a, b, intLevel)
 %
 % NOTE2: intLevels > 25 should be avoided as they take a _long_ time.
 
+  % Error checks
+  if intLevel <= 0 || mod(intLevel, 1) ~= 0
+    error('Integration level must be a positive integer');
+  end
+
   intTable = zeros(intLevel); % Empty matrix to use as as a divided difference
                               % table
   
