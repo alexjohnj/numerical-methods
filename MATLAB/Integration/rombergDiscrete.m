@@ -15,7 +15,7 @@ function [I, rErr] = rombergDiscrete(intEstimates)
   end
 
   intTable = zeros(length(intEstimates));
-  relativeErrorTable = zeros(length(intTable));
+  relativeErrorTable = zeros(length(intTable), 1);
 
   intTable(:, 1) = intEstimates;
 
@@ -25,11 +25,10 @@ function [I, rErr] = rombergDiscrete(intEstimates)
     end
   end
 
-  % TODO: Make this work
   for kk = 2:length(intTable)
-    relativeErrorTable(kk, 1) = 100 * abs((intTable(1, kk) - intTable(1, kk)) / intTable(1, kk));
+    relativeErrorTable(kk, 1) = 100 * abs((intTable(1, kk) - intTable(2, kk-1)) / intTable(1, kk));
   end
 
   I = intTable(1, end);
-  rErr = relativeErrorTable(1, end);
+  rErr = relativeErrorTable(end);
 end
