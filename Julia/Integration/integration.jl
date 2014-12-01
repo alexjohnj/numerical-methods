@@ -13,6 +13,31 @@ function ctrap(f::Function, a::Number, b::Number, n::Number)
   0.5 * h * (f(a) + 2*sum(f([a+h:h:b-h])) + f(b));
 end
 
+function richardson(f::Function, a::Number, b::Number, n::Number, n2::Number)
+  #= Numerical integration of functions using Richardson's Method
+  Keyword Arguments:
+    f -- Anonymous function to integrate
+    a -- Lower limit of integration
+    b -- Upper limit of integration
+    n -- Number of intervals to use for 1st estimate
+    n2 -- Number of intervals to use for 2nd estimate.
+  =#
+
+  # Error checks
+  if n <= 0 || n2 <= 0
+    error("n and n2 must be positive integers.");
+  end
+
+  if n == n2
+    error("n and n2 can't be equal.");
+  end
+
+  I1, I2 = ctrap(f, a, b, n), ctrap(f, a, b, n2);
+  h1, h2 = (b - a) / n, (b - a) / n2;
+
+  I2 + ((I1 - I2) / (1 - (h1 / h2)^2));
+end
+
 function simpsonInt(f::Function, x1::Number, x2::Number, x3::Number)
   #= Numerical integration of functions using Simpson's 1/3 Rule
   
