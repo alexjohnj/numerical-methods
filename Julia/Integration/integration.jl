@@ -1,35 +1,16 @@
-function trapezoidInt(f::Function, x1::Number, x2::Number)
-  #= Numerical integration of functions using the trapezoid rule
-
-  Keyword arguments:
+function ctrap(f::Function, a::Number, b::Number, n::Number)
+  #= Numerical integration of functions using the trapezium rule 
+  Keyword Arguments:
     f -- Anonymous function to integrate
-    x1 -- Lower limit of integration
-    x2 -- upper limit of integration
-
-  Returns:
-    The the result of ∫f between x1 and x2
+    a -- Lower limit of integration
+    b -- Upper limit of integration
+    n -- The number of sections to use in the calculation
   =#
-  (x2 - x1) * 0.5 * (f(x1) + f(x2));
-end
-
-function trapezoidInt(f::Function, x1::Number, xn::Number, n::Int)
-  #= Numerical Integration of functions using the composite trapezoid rule
-  Keyword arguments:
-    f -- An anonymous function to integrate. Should be able to take vectors
-         as arguments.
-    x1 -- Lower limit of integration
-    xn -- Upper limit of integration
-    n -- Number of points to use such that n-1 sections will be used
-
-  Returns:
-    The results of ∫f between x1 and x2
-  =#
-  if n <= 1
-    error("Insufficient data points. Try increasing n.");
+  if n <= 0
+    error("n must be a positive integer");
   end
-
-  h = (xn - x1) / (n - 1);
-  0.5 * h * (f(x1) + 2*sum(f([x1+h:h:xn-h])) + f(xn));
+  h = (b - a) / n;
+  0.5 * h * (f(a) + 2*sum(f([a+h:h:b-h])) + f(b));
 end
 
 function simpsonInt(f::Function, x1::Number, x2::Number, x3::Number)
