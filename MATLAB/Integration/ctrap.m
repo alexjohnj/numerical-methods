@@ -1,6 +1,6 @@
-function [I] = trapz(f, a, b, n)
-%TRAPZ Integrate functions using the composite trapezoid rule
-%   I=trapz(f,a,b,n) estimates the integral of the
+function [I, h] = ctrap(f, a, b, n)
+%CTRAP Integrate functions using the composite trapezoid rule
+%   I=ctrap(f,a,b,n) estimates the integral of the
 %   function f between a through b using n sections with the composite
 %   trapezoid rule. Note that f must be vectorized. 
   if n <= 0 || mod(n, 1) ~= 0
