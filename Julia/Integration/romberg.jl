@@ -1,29 +1,27 @@
-function romberg(f::Function, a::Number, b::Number, intLevel::Int)
+function romberg(f::Function, a::Number, b::Number, nl::Int)
   #= Numerical Integration of functions using Romberg's method.
   Keyword arguments:
   f -- Anonymous functon to integrate
   a -- Lower limit of integration
   b -- Upper limit of integration
-  intLevel -- The level of integration to go to.
+  nl -- The level of integration to go to.
 
   Returns:
   The result of the integration of f between a & b
   =#
 
-  intTable = zeros(intLevel, intLevel); # Empty matrix to use as div diff table
+  intTable = zeros(nl, nl); # Empty matrix to use as div diff table
 
   # Calculate the first column of the div diff table using the trapezium rule.
   h = (b - a);
-  for k = 1:intLevel
+  for k = 1:nl
     intTable[k,1] = 0.5 * h * (f(a) + 2*sum(f([a+h:h:b-h])) + f(b));
     h /= 2;
   end
 
   # Calculate the remaining elements using Romberg's method.
-  for k = 2:intLevel
-    for j = size(intTable)[1]-k+1:-1:1
-      intTable[j, k] = ((4^(k-1))intTable[j+1, k-1] - intTable[j, k-1])/((4^(k-1)) - 1);
-    end
+  for k = 2:nl, j = nl-k+1:-1:1
+    intTable[j, k] = ((4^(k-1))intTable[j+1, k-1] - intTable[j, k-1])/((4^(k-1)) - 1);    
   end
 
   return intTable[1, end];
