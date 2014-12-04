@@ -1,4 +1,4 @@
-function [] = parabolicinterp(f, xl, xm, xu, ea, maxIter)
+function [xo] = parabolicinterp(f, xl, xm, xu, ea, maxIter)
   % 1D Optimisation using parabolic interpolation.
   %
   %   parabolicinterp(f,xl,xm,xu,maxIter) Estimates the optimum of the
@@ -6,8 +6,7 @@ function [] = parabolicinterp(f, xl, xm, xu, ea, maxIter)
   %   upper guesses for the optimum. It iterates on the estimate until the
   %   relative error falls below ea or maxIter iterations have occurred. 
   
-  % Empty matrix to store successive iterations of the optimum
-  results = nan(maxIter, 3);
+  xo = NaN; % Current estimate of the optimum
   
   % Precompute f(x) for the initial guesses to avoid needlessly
   % recalculating on each iteration
@@ -19,6 +18,7 @@ function [] = parabolicinterp(f, xl, xm, xu, ea, maxIter)
     % Solution for xo using simultaneous equations.
     fracNumerator = ((xm - xl)^2 * (fxm - fxu)) - ((xm-xu)^2*(fxm-fxl));
     fracDenominator = ((xm-xl)*(fxm-fxu)) - ((xm-xu)*(fxm - fxl));
+    xlast = xo;
     xo = xm - 0.5 * (fracNumerator/fracDenominator); % Current estimate of optimum
     
     if xo < xm
@@ -36,26 +36,11 @@ function [] = parabolicinterp(f, xl, xm, xu, ea, maxIter)
       xm = xo;
       fxm = f(xm);
     else
-      results = results(1:ii-1, :);
       break;
     end
     
     % Calculate relative error and break if it is below our desired
     % accuracy
-    relativeError = nan(1);
-    if ii > 1
-      relativeError = abs((xo - results(ii-1, 2)) / xo) * 100;
-    end
-    
-    results(ii, :) = [ii xo relativeError];
-    
-    if relativeError < ea
-      results = results(1:ii, :);
-      break;
-    end
-    
+    if abs((xo - xlast) / xo) * 100 < ea, break; end
   end
-    
-  fprintf('Iteration\tOptimum\t\tRelative Error\n');
-  fprintf('%d\t\t%.8f\t%.8f\n', results');
 end
